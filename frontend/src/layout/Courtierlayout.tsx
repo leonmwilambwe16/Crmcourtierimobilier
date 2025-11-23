@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar'
 
 const Courtierlayout = () => {
   return (
-    <div>
+    <div className='layout-container'>
       <Sidebar/>
       <main>
         <Outlet/>

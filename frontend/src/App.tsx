@@ -11,6 +11,15 @@ import Clientdashboard from './Pages/Clientdashboard'
 import LoginPage from './Pages/LoginPage'
 import SignupPage from './Pages/SignupPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import ManageClients from './Pages/admin/ManageClients'
+import ManageCourtiers from './Pages/admin/ManageCourtier'
+import ManageProperties from './Pages/admin/ManageProperties'
+import CourtierProperties from './Pages/courtier/CourtierProperties'
+import CourtierClients from './Pages/courtier/CourtierClients'
+import CourtierMessages from './Pages/courtier/CourtierMessage'
+import ClientProperties from './Pages/client/ClientProperties'
+import ClientFiles from './Pages/client/ClientFiles'
+import ClientMessages from './Pages/client/ClientMessage'
 
 
 function App() {
@@ -29,7 +38,10 @@ function App() {
       </ProtectedRoute>
      
       }>
-     <Route path='/manager-dashboar' element={<Managerdashboard/>}/>
+     <Route path='/manager-dashboard' element={<Managerdashboard/>}/>
+     <Route path='/manage-clients' element={<ManageClients/>}/>
+      <Route path='/manage-courtiers' element={<ManageCourtiers/>}/>
+      <Route path='/manage-properties' element={<ManageProperties/>}/>
     </Route>
 
     <Route element={
@@ -39,6 +51,9 @@ function App() {
    
       }>
       <Route path='/courtier-dashboard' element={<Courtierdashboard/>}/>
+      <Route path='/courtier-properties' element={<CourtierProperties/>}/>
+      <Route path='/courtier-clients' element={<CourtierClients/>}/>
+      <Route path='/courtier-messages' element={<CourtierMessages/>}/>
     </Route>
      
      <Route element={
@@ -48,6 +63,9 @@ function App() {
      
       }>
       <Route path='/client-dashboard' element={<Clientdashboard/>}/>
+       <Route path='/client-properties' element={<ClientProperties/>}/>
+       <Route path='/client-files' element={<ClientFiles/>}/>
+       <Route path='/client-messages' element={<ClientMessages/>}/>
      </Route>
    
   </Routes>

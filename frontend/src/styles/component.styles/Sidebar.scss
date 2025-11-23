@@ -1,8 +1,139 @@
-.sidebar-container{
-    background: white;
+.sidebar-container {
+  position: relative;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 25px;
+  align-items: center;
+  width: 250px;
+  min-height: 100vh;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  transition: all 0.3s ease;
+
+  &.closed {
+    width: 60px;
+  }
+
+  .logo-sidebar-menu {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 10px 25px;
     align-items: center;
+    gap: 20px;
+
+    .avatar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #ecf0f1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        color: #7f8c8d;
+      }
+
+      .name {
+        display: flex;
+        flex-direction: column;
+
+        p {
+          margin: 0;
+          font-weight: 600;
+          font-size: 0.9rem;
+          color: #2c3e50;
+        }
+
+        span {
+          font-size: 0.75rem;
+          color: #7f8c8d;
+        }
+      }
+    }
+
+    .side-menu {
+      width: 100%;
+
+      .menu-side-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        li {
+          width: 100%;
+
+          a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease-in-out;
+
+            &:hover {
+              background-color: #f1f1f1;
+              color: #2c3e50;
+            }
+
+            .label {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .logout-btn {
+    width: 100%;
+
+    button {
+      width: 100%;
+      padding: 10px 0;
+      border: none;
+      border-radius: 5px;
+      background-color: #e74c3c;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+
+      &:hover {
+        background-color: #c0392b;
+      }
+    }
+  }
+
+  .toggle-btn-fixed {
+    position: absolute;
+    top: 15px;
+    right: -10px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 4px;
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
 }

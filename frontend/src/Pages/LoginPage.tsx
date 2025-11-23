@@ -1,7 +1,7 @@
 import React, { useState, type FormEvent } from 'react'
 import '../styles/login.style/Login.scss'
-import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../Context/AuthContext';
 
 interface LoginForm{
   email:string;
