@@ -20,6 +20,7 @@ import CourtierMessages from './Pages/courtier/CourtierMessage'
 import ClientProperties from './Pages/client/ClientProperties'
 import ClientFiles from './Pages/client/ClientFiles'
 import ClientMessages from './Pages/client/ClientMessage'
+import ClientCourtiers from './Pages/client/ClientCourtiers'
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
      
       }>
       <Route path='/client-dashboard' element={<Clientdashboard/>}/>
+       <Route path='/client-courtier' element={<ClientCourtiers/>}/>
        <Route path='/client-properties' element={<ClientProperties/>}/>
        <Route path='/client-files' element={<ClientFiles/>}/>
        <Route path='/client-messages' element={<ClientMessages/>}/>

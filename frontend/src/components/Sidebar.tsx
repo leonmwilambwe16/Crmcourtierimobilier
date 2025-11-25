@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { 
   FiMenu, FiX, FiHome, FiFolder, FiMessageCircle, FiUsers, FiSettings 
 } from "react-icons/fi";
+import { FaBuildingColumns } from "react-icons/fa6";
 
 const Sidebar = () => {
   const { user } = useAuth();
@@ -53,9 +54,16 @@ const Sidebar = () => {
                     {isOpen && <span className="label">Dashboard</span>}
                   </Link>
                 </li>
+
+                 <li>
+                  <Link to="/client-courtier">
+                     <FiUsers size={20} />
+                    {isOpen && <span className="label">Courtier</span>}
+                  </Link>
+                </li>
                 <li>
                   <Link to="/client-properties">
-                    <FiFolder size={20} />
+                    <FaBuildingColumns size={20} />
                     {isOpen && <span className="label">My Properties</span>}
                   </Link>
                 </li>

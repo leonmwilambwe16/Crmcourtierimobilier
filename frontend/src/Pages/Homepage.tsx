@@ -1,8 +1,11 @@
 import React from 'react'
+import "../styles/page.styles/Homepage.scss"
 
 const Homepage = () => {
   return (
-    <div>Homepage</div>
+    <div className='container-homepage'>
+      landing page
+    </div>
   )
 }
 

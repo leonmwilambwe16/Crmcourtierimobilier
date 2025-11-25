@@ -1,5 +1,12 @@
-.layout-container{
-    display: flex;
-    width: 100%;
-    height: 100vh;
+.layout-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+
+  main {
+    flex: 1;                // <— THIS MAKES IT TAKE FULL REMAINING WIDTH
+    height: 100%;
+    overflow-y: auto;       // <— scroll when content gets long
+    background: #f8f8f8;    // optional clean background
+  }
 }
