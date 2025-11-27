@@ -3,10 +3,104 @@
   width: 100%;
   height: 100vh;
 
-  main {
-    flex: 1;                // <— THIS MAKES IT TAKE FULL REMAINING WIDTH
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    overflow-y: auto;       // <— scroll when content gets long
-    background: #f8f8f8;    // optional clean background
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      background-color: var(--main-bg, #f8f8f8);
+      color: var(--text-color, #333);
+      padding: 1rem;
+      transition: background 0.3s, color 0.3s;
+    }
+  }
+}
+
+/* Light Theme */
+:root[data-theme='light'] {
+  --bg-color: #f8f8f8;
+  --text-color: #333;
+  --navbar-bg: #fff;
+  --navbar-text: #333;
+  --sidebar-bg: #fff;
+  --sidebar-text: #333;
+  --sidebar-hover-bg: #f1f1f1;
+  --sidebar-hover-text: #2c3e50;
+  --logout-bg: #290603;
+  --logout-text: #fff;
+  --logout-hover-bg: rgb(174, 171, 171);
+  --logout-hover-text: black;
+}
+
+/* Dark Theme */
+:root[data-theme='dark'] {
+  --bg-color: #1e1e1e;
+  --text-color: #fff;
+  --navbar-bg: #333;
+  --navbar-text: #fff;
+  --sidebar-bg: #2c2c2c;
+  --sidebar-text: #ddd;
+  --sidebar-hover-bg: #3a3a3a;
+  --sidebar-hover-text: #fff;
+  --logout-bg: #8b0000;
+  --logout-text: #fff;
+  --logout-hover-bg: #555;
+  --logout-hover-text: #fff;
+}
+
+
+/* Dark mode overrides for sidebar, navbar, main content */
+:root[data-theme='dark'] {
+  /* Sidebar */
+  .sidebar-container {
+    background: #2c2c2c !important;
+    color: #ddd !important;
+
+    .side-menu a {
+      color: #ddd !important;
+
+      &:hover {
+        background-color: #3a3a3a !important;
+        color: #fff !important;
+      }
+    }
+
+    .logout-btn button {
+      background-color: #8b0000 !important;
+      color: #fff !important;
+
+      &:hover {
+        background-color: #555 !important;
+        color: #fff !important;
+      }
+    }
+
+    .toggle-btn-fixed {
+      background: #2c2c2c !important;
+
+      &:hover {
+        background-color: #3a3a3a !important;
+      }
+    }
+  }
+
+  /* Navbar */
+  .dashboard-navbar {
+    background-color: #333 !important;
+    color: #fff !important;
+
+    .theme-toggle {
+      color: #fff !important;
+    }
+  }
+
+  /* Main content */
+  .main-content main {
+    background-color: #1e1e1e !important;
+    color: #fff !important;
   }
 }

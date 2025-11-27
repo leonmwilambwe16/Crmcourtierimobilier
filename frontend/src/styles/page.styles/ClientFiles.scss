@@ -1,232 +1,243 @@
-/* ================== PAGE CONTAINER ================== */
 .client-files-page {
   width: 100%;
   min-height: 100vh;
-  padding: 40px 20px;
-  background: #f3f5fb;
+  padding: 24px;
+  background: #f7f8fa;
   font-family: "Inter", sans-serif;
-}
-
-.title {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 700;
   color: #111;
-  margin-bottom: 5px;
-}
 
-.subtitle {
-  text-align: center;
-  color: #555;
-  margin-bottom: 35px;
-  font-size: 15px;
-}
-
-/* ================== FILE CARDS ================== */
-.files-grid {
-  max-width: 900px;
-  margin: auto;
-  display: grid;
-  gap: 20px;
-}
-
-.file-card {
-  background: white;
-  padding: 18px 22px;
-  border-radius: 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  box-shadow: 0 4px 15px rgba(0,0,0,.07);
-  transition: .25s ease;
-}
-
-.file-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,.1);
-}
-
-.file-info {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.file-icon {
-  font-size: 26px;
-}
-
-.file-name {
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
-}
-
-/* ================== STATUS LINE / STEPPER ================== */
-.status-line {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  position: relative;
-}
-
-.circle {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #ccc;
-  z-index: 1;
-}
-
-.circle.active {
-  background: #4f6bff;
-}
-
-.line {
-  height: 4px;
-  background: #ccc;
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  right: -50%;
-  z-index: 0;
-}
-
-.step-label {
-  margin-top: 6px;
-  font-size: 10px;
-  color: #555;
-  text-align: center;
-}
-
-.step .circle.active + .line {
-  background: #4f6bff;
-}
-
-/* ================== VIEW BUTTON ================== */
-.view-btn {
-  padding: 8px 14px;
-  background: #4f6bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .25s;
-  align-self: flex-end;
-}
-
-.view-btn:hover {
-  background: #3b50d6;
-}
-
-/* ================== MODAL ================== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.55);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 200;
-}
-
-.modal-box {
-  background: white;
-  width: 92%;
-  max-width: 400px;
-  padding: 25px;
-  border-radius: 18px;
-  animation: pop .3s ease;
-  text-align: center;
-  position: relative;
-}
-
-.modal-text {
-  margin: 12px 0 20px;
-  color: #444;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-.read-btn, .download-btn {
-  padding: 10px 14px;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  transition: .25s;
-}
-
-.read-btn { background: #4e5bfd; }
-.read-btn:hover { background: #3541d1; }
-
-.download-btn { background: #14c988; }
-.download-btn:hover { background: #0ea56f; }
-
-.close-btn {
-  background: transparent;
-  border: none;
-  font-size: 17px;
-  font-weight: 600;
-  color: #333;
-  cursor: pointer;
-}
-
-.close-btn:hover { color: #000; }
-
-/* ================== ANIMATION ================== */
-@keyframes pop {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* ================== MOBILE RESPONSIVE ================== */
-@media(max-width:700px) {
-  .file-card {
-    flex-direction: column;
-    gap: 12px;
+  .title {
     text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 24px;
+    font-size: 15px;
   }
 
-  .view-btn {
-    width: 70%;
-    padding: 8px 10px;
-    font-size: 14px;
-    align-self: center;
-  }
-
-  .status-line {
+  .files-grid {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    gap: 16px;
+
+    @media (min-width: 600px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .file-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      padding: 16px;
+      flex: 1 1 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 22px rgba(0,0,0,0.1);
+      }
+
+      .file-info {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+
+        .file-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 8px;
+          background: #ececf9;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          color: #444;
+        }
+
+        .file-details {
+          display: flex;
+          flex-direction: column;
+
+          .file-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #222;
+            word-break: break-all;
+          }
+
+          .file-status {
+            margin-top: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+          }
+        }
+      }
+
+      .status-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+
+        .step {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: background 0.3s, box-shadow 0.3s;
+          }
+
+          .line {
+            width: 100%;
+            height: 3px;
+            background: #ddd;
+            margin: 4px 0;
+            transition: background 0.3s;
+          }
+
+          .step-label {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #999;
+          }
+
+          &.completed .circle { background: #4caf50; }
+          &.completed .line { background: #4caf50; }
+          &.completed .step-label { color: #4caf50; font-weight: 500; }
+
+          &.active .circle {
+            background: #2196f3;
+            box-shadow: 0 0 6px rgba(33,150,243,0.6);
+          }
+          &.active .line { background: #2196f3; }
+          &.active .step-label { color: #2196f3; font-weight: 600; }
+        }
+      }
+
+      .view-btn {
+        align-self: flex-end;
+        padding: 8px 14px;
+        background: #000;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        cursor: pointer;
+
+        &:hover {
+          background: #ff0000;
+          transform: translateY(-2px);
+        }
+      }
+    }
   }
-  .step {
-    flex-direction: row;
+
+  /* Modal styles */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
     align-items: center;
+    z-index: 1001;
   }
-  .step-label {
-    margin-left: 6px;
-    font-size: 10px;
+
+  .modal-box {
+    background: #fff;
+    width: 90%;
+    max-width: 420px;
+    padding: 28px 24px;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+    animation: modal-pop 0.25s ease-out;
   }
-  .line {
-    display: none;
+
+  .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #222;
+  }
+
+  .modal-text {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 22px;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    background: #000;
+    color: #fff;
+  }
+
+  .btn:hover {
+    background: #ff0000;
+    transform: translateY(-2px);
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: #777;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s ease;
+  }
+  .close-btn:hover {
+    color: #333;
+    transform: scale(1.05);
+  }
+
+  @keyframes modal-pop {
+    from { transform: scale(0.95); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
   }
 }

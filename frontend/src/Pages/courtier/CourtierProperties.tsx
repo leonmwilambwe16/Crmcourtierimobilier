@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
-import "../../styles/page.styles/Properties.scss";
+import "../../styles/page.styles/CourtierProperties.form.scss";
 
 interface PropertyForm {
   title: string;
@@ -8,6 +8,7 @@ interface PropertyForm {
   address: string;
   city: string;
   description: string;
+  image?: File | null;
 }
 
 interface Property {
@@ -17,6 +18,7 @@ interface Property {
   address: string;
   city: string;
   description: string;
+  imageUrl?: string;
 }
 
 const CourtierProperties = () => {
@@ -28,16 +30,14 @@ const CourtierProperties = () => {
     address: "",
     city: "",
     description: "",
+    image: null
   });
 
-  // Fetch courtier properties
   const fetchProperties = async () => {
     try {
       const res = await getCourtierProperties();
-      if (res?.properties) setProperties(res.properties);
-      else setProperties([]);
-    } catch (error) {
-      console.error("Error fetching properties:", error);
+      setProperties(res?.properties || []);
+    } catch {
       setProperties([]);
     }
   };
@@ -46,100 +46,71 @@ const CourtierProperties = () => {
     fetchProperties();
   }, []);
 
-  // Handle input changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (e.target.name === "image") {
+      const fileInput = e.target as HTMLInputElement;
+      const file = fileInput.files?.[0] || null;
+      setForm({ ...form, image: file });
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
   };
 
-  // Add new property
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return alert("You must be logged in");
 
-    if (!user) {
-      alert("❌ You must be logged in as a courtier.");
-      return;
-    }
+    const payload = new FormData();
+    payload.append("title", form.title);
+    payload.append("price", form.price);
+    payload.append("address", form.address);
+    payload.append("city", form.city);
+    payload.append("description", form.description);
+    if (form.image) payload.append("image", form.image);
+    payload.append("courtierId", user.id);
 
-    try {
-      const payload = {
-        ...form,
-        price: Number(form.price),
-        courtierId: user.id,
-      };
+    const res = await createProperty(payload);
 
-      const res = await createProperty(payload);
-
-      if (res?.success) {
-        alert("✅ Property added successfully!");
-        setForm({ title: "", price: "", address: "", city: "", description: "" });
-        fetchProperties(); // refresh list
-      } else {
-        alert("❌ Error creating property: " + (res?.message || "Unknown error"));
-      }
-    } catch (error) {
-      console.error("Error creating property:", error);
-      alert("❌ Error creating property.");
+    if (res?.success) {
+      alert("Property Added!");
+      setForm({ title: "", price: "", address: "", city: "", description: "", image: null });
+      fetchProperties();
     }
   };
 
   return (
-    <div className="properties-page">
+    <div className="properties-container">
       <h1>My Properties</h1>
 
-      {/* Add Property Form */}
-      <form onSubmit={handleSubmit} className="add-property-form">
-        <input
-          name="title"
-          placeholder="Title"
-          value={form.title}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="price"
-          type="number"
-          placeholder="Price"
-          value={form.price}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="address"
-          placeholder="Address"
-          value={form.address}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="city"
-          placeholder="City"
-          value={form.city}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Add Property</button>
+      {/* Add Property Form Styled Like Card */}
+      <form onSubmit={handleSubmit} className="property-card add-form-card">
+        <input name="title" placeholder="Property Title" value={form.title} onChange={handleChange} required />
+        <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} required />
+        <input name="address" placeholder="Address" value={form.address} onChange={handleChange} required />
+        <input name="city" placeholder="City" value={form.city} onChange={handleChange} required />
+        <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
+
+        {/* 📌 Image Upload */}
+        <label className="upload-box">
+          Upload Property Picture 📷
+          <input type="file" name="image" accept="image/*" onChange={handleChange} />
+        </label>
+
+        <button type="submit" className="add-btn">Add Property</button>
       </form>
 
-      {/* List of Properties */}
-      <ul className="property-list">
-        {properties.length > 0 ? (
-          properties.map((p) => (
-            <li key={p._id}>
-              <strong>{p.title}</strong> — {p.address}, {p.city} | ${p.price}
-              <p>{p.description}</p>
-            </li>
-          ))
-        ) : (
-          <li>No properties yet.</li>
-        )}
-      </ul>
+      {/* Display Properties In Grid */}
+      {properties.map((p) => (
+        <div key={p._id} className="property-card">
+          <img src={p.imageUrl || "/placeholder.jpg"} className="property-image" alt="Property" />
+          <h2 className="property-title">{p.title}</h2>
+          <p className="property-price">${p.price.toLocaleString()}</p>
+          <p className="property-address">{p.address}, {p.city}</p>
+          <p className="property-description">{p.description}</p>
+        </div>
+      ))}
     </div>
   );
 };

@@ -1,14 +1,19 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
+import DashboardNavbar from '../components/DashboardNavbar'
+import "../styles/laout.style/Laout.scss"
 
 const Courtierlayout = () => {
   return (
     <div className='layout-container'>
       <Sidebar/>
-      <main>
-        <Outlet/>
-      </main>
+      <div className="main-content">
+        <DashboardNavbar/>
+        <main>
+          <Outlet/>
+        </main>
+      </div>
     </div>
   )
 }

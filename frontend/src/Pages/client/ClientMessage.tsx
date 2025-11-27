@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../Context/AuthContext";
-import "../../styles/page.styles/Message.scss"
+import { useLocation } from "react-router-dom";
+import "../../styles/page.styles/Message.scss";
 
 interface Message {
   sender: string;
@@ -10,6 +11,9 @@ interface Message {
 
 const ClientMessages: React.FC = () => {
   const { getConversations, user } = useAuth();
+  const location = useLocation();
+  const courtier = location.state?.courtier;
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -35,48 +39,45 @@ const ClientMessages: React.FC = () => {
     setNewMessage("");
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") handleSend();
-  };
-
   return (
-    <div className="gmail-chat-page">
-      <div className="chat-container">
-        {/* Chat header */}
-        <div className="chat-header">
-          <h3>Chat with Courtier</h3>
-        </div>
+    <div className="message-page">
 
-        {/* Messages area */}
-        <div className="chat-window">
-          {messages.length === 0 && (
-            <p className="no-messages">No messages yet.</p>
-          )}
-          {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`chat-message ${
-                m.sender === user?.id ? "me" : "courtier"
-              }`}
-            >
-              <p>{m.content}</p>
-              {m.timestamp && <span className="timestamp">{m.timestamp}</span>}
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
+      {/* Header like dashboard-navbar UI */}
+      <div className="message-header">
+        {courtier ? (
+          <div className="courtier-info">
+            <img src={courtier.picture} alt={courtier.name} />
+            <h3>{courtier.name}</h3>
+          </div>
+        ) : (
+          <h3>Conversation</h3>
+        )}
+      </div>
 
-        {/* Input area */}
-        <div className="chat-input">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleKeyPress}
-          />
-          <button onClick={handleSend}>Send</button>
-        </div>
+      {/* MESSAGES */}
+      <div className="message-body">
+        {messages.length === 0 && <p className="no-messages">No messages yet.</p>}
+
+        {messages.map((m, i) => (
+          <div key={i} className={`bubble ${m.sender === user?.id ? "me" : "courtier"}`}>
+            <p>{m.content}</p>
+            {m.timestamp && <span className="timestamp">{m.timestamp}</span>}
+          </div>
+        ))}
+
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* INPUT */}
+      <div className="message-input">
+        <input
+          type="text"
+          placeholder="Type a message..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+        />
+        <button onClick={handleSend}>Send</button>
       </div>
     </div>
   );

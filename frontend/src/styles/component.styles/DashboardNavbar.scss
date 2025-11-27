@@ -1,0 +1,104 @@
+/* ===================== DASHBOARD TOP NAVBAR ===================== */
+
+.dashboard-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 35px;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  transition: background 0.3s ease, color 0.3s ease;
+
+  /* LEFT SECTION — LOGO OR TITLE */
+  .left {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  /* THEME TOGGLE ICON */
+  .theme-toggle {
+    font-size: 1.35rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: opacity .3s;
+
+    &:hover { opacity: 0.8; }
+  }
+
+  /* RIGHT — clock, profile picture, icons */
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+
+    .calendar, .clock {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    img.profile {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform .3s;
+
+      &:hover { transform: scale(1.05); }
+    }
+  }
+}
+
+
+/* ===================== DARK MODE SUPPORT ===================== */
+/* 100% same theme logic as your sidebar */
+
+:root[data-theme="dark"] .dashboard-navbar {
+  background-color: #2c2c2c !important;
+  color: #ddd !important;
+  box-shadow: 0 2px 4px rgba(255,255,255,0.04);
+
+  .right .calendar,
+  .right .clock {
+    color: #dcdcdc;
+  }
+
+  .theme-toggle { color: #fff; }
+
+  img.profile {
+    border: 2px solid #444;
+  }
+}
+
+
+/* ===================== RESPONSIVE PHONE MODE ===================== */
+
+@media (max-width: 600px) {
+  .dashboard-navbar {
+    padding: 12px 15px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+
+    .left { font-size: 1.15rem; }
+
+    .right {
+      flex-wrap: wrap;
+      gap: .6rem;
+      font-size: .9rem;
+
+      .calendar, .clock { font-size: .85rem; }
+      img.profile { width: 34px; height: 34px; }
+      .theme-toggle { font-size: 1.1rem; }
+    }
+  }
+}
