@@ -92,8 +92,14 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <Link to="/courtier-properties">
-                    <FiFolder size={20} />
+                    <FaBuildingColumns size={20} />
                     {isOpen && <span className="label">My Properties</span>}
+                  </Link>
+                </li>
+                  <li>
+                  <Link to="/courtier-files">
+                    <FiFolder size={20} />
+                    {isOpen && <span className="label">Create Files</span>}
                   </Link>
                 </li>
                 <li>

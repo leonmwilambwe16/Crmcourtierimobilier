@@ -1,31 +1,66 @@
+:root {
+  --bg: #f7f8fa;
+  --text: #111;
+  --text-secondary: #555;
+  --card-bg: #fff;
+  --card-shadow: rgba(0,0,0,0.1);
+  --card-shadow-hover: rgba(0,0,0,0.15);
+  --title-color: #333;
+  --subtitle-color: #555;
+  --btn-msg: #4f6bff;
+  --btn-add: #22bb45;
+  --btn-bg: #fff;
+  --btn-bg-hover: #f0f0f0;
+  --popup-bg: #fff;
+  --popup-shadow: rgba(0,0,0,0.25);
+}
+
+[data-theme="dark"] {
+  --bg: #121212;
+  --text: #eee;
+  --text-secondary: #bbb;
+  --card-bg: #1e1e1e;
+  --card-shadow: rgba(0,0,0,0.5);
+  --card-shadow-hover: rgba(0,0,0,0.7);
+  --title-color: #eee;
+  --subtitle-color: #bbb;
+  --btn-msg: #4f6bff;
+  --btn-add: #22bb45;
+  --btn-bg: #2a2a2a;
+  --btn-bg-hover: #3a3a3a;
+  --popup-bg: #1e1e1e;
+  --popup-shadow: rgba(0,0,0,0.7);
+}
+
 .client-courtier {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   padding: 2rem 1rem;
+  background: var(--bg);
+  color: var(--text);
 
   h2 {
     font-size: 2rem;
     margin-bottom: 2rem;
     font-weight: 600;
-    color: #333;
+    color: var(--title-color);
   }
 
   .courtier-box {
     width: 100%;
     max-width: 1200px;
-
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 1.5rem;
   }
 
   .courtier-card {
-    background: #fff;
+    background: var(--card-bg);
     padding: 1.2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px var(--card-shadow);
     text-align: center;
     transition: 0.3s;
     cursor: pointer;
@@ -33,7 +68,7 @@
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 6px 20px var(--card-shadow-hover);
     }
 
     img {
@@ -48,58 +83,45 @@
       margin: 0.5rem 0;
       font-size: 1.1rem;
       font-weight: 600;
-      color: #222;
+      color: var(--text);
     }
 
     p {
-      color: #555;
+      color: var(--subtitle-color);
       font-size: 0.95rem;
       margin-top: 0.5rem;
     }
 
-  
     .message-btn,
     .add-btn {
       position: absolute;
       top: 12px;
-
       width: 38px;
       height: 38px;
       padding: 0;
-
-      background: white;
+      background: var(--btn-bg);
       border: none;
-      border-radius: 50%;               /* PERFECT CIRCLE */
+      border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-
       font-size: 20px;
       cursor: pointer;
-
       transition: 0.2s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 6px var(--card-shadow);
 
       &:hover {
-        background: #f0f0f0;
+        background: var(--btn-bg-hover);
         transform: scale(1.1);
       }
     }
 
-    .message-btn {
-      left: 12px;
-      color: #4f6bff;
-    }
-
-    .add-btn {
-      right: 12px;
-      color: #22bb45;
-    }
+    .message-btn { left: 12px; color: var(--btn-msg); }
+    .add-btn { right: 12px; color: var(--btn-add); }
   }
 }
 
-
-
+/* POPUP */
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -110,15 +132,13 @@
   z-index: 99999;
 }
 
-
-
 .popup-card {
   width: 320px;
-  background: white;
+  background: var(--popup-bg);
   padding: 1.8rem;
   border-radius: 14px;
   text-align: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 20px var(--popup-shadow);
   animation: fadeIn 0.25s ease;
 
   img {
@@ -132,10 +152,11 @@
   h2 {
     font-size: 1.4rem;
     margin-bottom: 8px;
+    color: var(--text);
   }
 
   p {
-    color: #555;
+    color: var(--subtitle-color);
     margin: 1rem 0;
   }
 
@@ -156,30 +177,17 @@
     .yes-btn {
       background: #04081c;
       color: white;
-
-      &:hover {
-        background: rgb(51, 2, 2);
-      }
+      &:hover { background: rgb(51,2,2); }
     }
 
     .no-btn {
       background: #ddd;
-
-      &:hover {
-        background: #ccc;
-      }
+      &:hover { background: #ccc; }
     }
   }
 }
 
-
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(.9); }
+  to { opacity: 1; transform: scale(1); }
 }

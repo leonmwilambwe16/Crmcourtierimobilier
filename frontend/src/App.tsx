@@ -21,6 +21,7 @@ import ClientProperties from './Pages/client/ClientProperties'
 import ClientFiles from './Pages/client/ClientFiles'
 import ClientMessages from './Pages/client/ClientMessage'
 import ClientCourtiers from './Pages/client/ClientCourtiers'
+import CourtierFiles from './Pages/courtier/CourtierFiles'
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
       <Route path='/courtier-dashboard' element={<Courtierdashboard/>}/>
       <Route path='/courtier-properties' element={<CourtierProperties/>}/>
       <Route path='/courtier-clients' element={<CourtierClients/>}/>
+      <Route path='/courtier-files' element={<CourtierFiles/>}/>
       <Route path='/courtier-messages' element={<CourtierMessages/>}/>
     </Route>
      

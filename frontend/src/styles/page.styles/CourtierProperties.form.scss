@@ -1,90 +1,223 @@
-/* ---------------- MAKE FORM A CARD LIKE PROPERTIES ---------------- */
-
-.add-form-card {
-  background:#fff;
-  border-radius:12px;
-  padding:1.3rem;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
-  transition:.2s;
-
-  display:flex;
-  flex-direction:column;
-  gap:1rem;
-
-  width:100%;
-  height:auto;          
-  min-height:420px;     /* 🔥 space for image + button inside */
-
-  /* Very important fix ↓ keep everything inside the same card */
-  overflow:visible;
+:root {
+  --bg: #f6f7fb;
+  --card-bg: #fff;
+  --text: #333;
+  --text-secondary: #4f4f4f;
+  --border: #dadada;
+  --primary: #050001;
+  --primary-hover: rgb(113, 7, 7);
+  --success-bg: #47db7d;
+  --success-text: #0e4021;
+  --shadow: rgba(0,0,0,0.05);
+  --edit-btn: #ffc107;
+  --edit-btn-hover: #e0a800;
+  --delete-btn: #ff4b4b;
+  --delete-btn-hover: #e53e3e;
 }
 
-/* Inputs same spacing + styling */
+[data-theme="dark"] {
+  --bg: #121212;
+  --card-bg: #1e1e1e;
+  --text: #eee;
+  --text-secondary: #bbb;
+  --border: #444;
+  --primary: #bbb;
+  --primary-hover: #fff;
+  --success-bg: #2e7d32;
+  --success-text: #dcedc8;
+  --shadow: rgba(0,0,0,0.7);
+  --edit-btn: #ffc107;
+  --edit-btn-hover: #e0a800;
+  --delete-btn: #f44336;
+  --delete-btn-hover: #e53e3e;
+}
+
+.properties-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+  padding: 2rem;
+  background: var(--bg);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ADD FORM */
+.add-form-card {
+  flex: 1;
+  max-width: 380px;
+  background: var(--card-bg);
+  padding: 1.6rem;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.add-form-card h2 {
+  margin-bottom: .7rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text);
+}
 
 .add-form-card input,
 .add-form-card textarea {
-  width:100%;
-  padding:0.9rem;
-  border-radius:10px;
-  border:1px solid #d6d6d6;
-  font-size:0.95rem;
+  width: 100%;
+  padding: .8rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: .95rem;
+  outline: none;
+  background: var(--card-bg);
+  color: var(--text);
+  transition: .2s;
 }
 
-.add-form-card textarea {
-  min-height:100px;
-  resize:none;
+.add-form-card input:focus,
+.add-form-card textarea:focus {
+  border-color: #5698ff;
 }
 
-/* ---------------- IMAGE UPLOAD INSIDE CARD ---------------- */
-
-.upload-box {
-  width:100%;               /* 🔥 aligns inside card */
-  background:#eef2ff;
-  border:2px dashed #6c7bff;
-  padding:1rem;
-  border-radius:12px;
-  text-align:center;
-  cursor:pointer;
-  font-weight:600;
-  font-size:0.95rem;
-
-  input{ display:none; }
-
-  &:hover {
-    background:#e1e6ff;
-  }
-}
-
-/* ---------------- BUTTON FIX — INSIDE THE SAME CARD ---------------- */
-
+/* Submit Button */
 .add-btn {
-  width:100%;             /* 🔥 full width inside the box */
-  background:#007bff;
-  border:none;
-  color:#fff;
-  padding:1rem;
-  border-radius:10px;
-  font-size:1rem;
-  font-weight:600;
-  cursor:pointer;
-  margin-top:0.3rem;      /* pushes a little space before button */
-
-  &:hover{
-    opacity:.9;
-    transform:scale(.97);
-  }
+  padding: .9rem;
+  background: var(--primary);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: .3s;
 }
 
+.add-btn:hover {
+  background: var(--primary-hover);
+  transform: scale(.98);
+}
 
-/* ---------------- MOBILE FIX ---------------- */
+/* PROPERTIES GRID */
+.properties-grid {
+  flex: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+  gap: 1.2rem;
+}
 
-@media(max-width:600px){
+.property-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0px 4px 10px var(--shadow);
+  transition: .3s;
+  display: flex;
+  flex-direction: column;
+}
 
-  .add-form-card{
-    padding:1rem;
-    min-height:480px;     /* More space on phone */
+.property-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Property Image */
+.property-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: .6rem;
+}
+
+/* Text */
+.property-card h3 {
+  margin: .6rem 0 .2rem;
+  font-size: 1.2rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.property-card .price {
+  font-weight: bold;
+  color: #178637;
+  margin-bottom: .4rem;
+}
+
+.property-card .description {
+  font-size: .9rem;
+  color: var(--text-secondary);
+  margin: .4rem 0 0;
+}
+
+/* BUTTONS */
+.card-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.edit-btn {
+  padding: .5rem .8rem;
+  background: var(--edit-btn);
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: .2s;
+}
+
+.edit-btn:hover {
+  background: var(--edit-btn-hover);
+}
+
+.delete-btn {
+  padding: .5rem .8rem;
+  background: var(--delete-btn);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: .2s;
+}
+
+.delete-btn:hover {
+  background: var(--delete-btn-hover);
+}
+
+/* SUCCESS ALERT */
+.alert-box {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--success-bg);
+  color: var(--success-text);
+  padding: .9rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 700;
+  box-shadow: 0px 4px 10px var(--shadow);
+  animation: fadeIn .35s ease-in-out;
+  z-index: 2000;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -10px);}
+  to   { opacity: 1; transform: translate(-50%, 0);}
+}
+
+/* RESPONSIVE */
+@media(max-width: 850px) {
+  .properties-container {
+    flex-direction: column;
+    padding: 1.3rem;
   }
 
-  .upload-box{ padding:1rem; font-size:.9rem; }
-  .add-btn{ padding:.9rem; font-size:.95rem; }
+  .add-form-card {
+    max-width: 100%;
+  }
 }

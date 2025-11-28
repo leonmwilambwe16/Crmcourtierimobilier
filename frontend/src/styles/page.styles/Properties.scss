@@ -1,31 +1,59 @@
+:root {
+  --bg: #f7f8fa;
+  --text: #111;
+  --text-secondary: #555;
+  --card-bg: #fff;
+  --card-shadow: rgba(0, 0, 0, 0.08);
+  --card-shadow-hover: rgba(0, 0, 0, 0.12);
+  --title-color: #333;
+  --price-color: #007bff;
+  --address-color: #555;
+  --desc-color: #666;
+}
+
+[data-theme="dark"] {
+  --bg: #121212;
+  --text: #eee;
+  --text-secondary: #bbb;
+  --card-bg: #1e1e1e;
+  --card-shadow: rgba(0,0,0,0.5);
+  --card-shadow-hover: rgba(0,0,0,0.7);
+  --title-color: #eee;
+  --price-color: #64b5f6;
+  --address-color: #bbb;
+  --desc-color: #ccc;
+}
+
 .properties-container {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
   padding: 2rem;
+  background: var(--bg);
+  color: var(--text);
 
   h1 {
     grid-column: 1 / -1;
     font-size: 1.8rem;
     font-weight: 700;
-    color: #333;
+    color: var(--title-color);
   }
 }
 
-/* 🖥️ DESKTOP — NORMAL FIXED CARD */
+/* DESKTOP — PROPERTY CARD */
 .property-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1.2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px var(--card-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   max-height: 360px;
   overflow: hidden;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 18px var(--card-shadow-hover);
   }
 }
 
@@ -40,9 +68,8 @@
   margin-top: 0.7rem;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--title-color);
 
-  /* Keep title clean (1 line max) */
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -53,18 +80,18 @@
   font-size: 1rem;
   font-weight: 700;
   margin-top: 0.2rem;
-  color: #007bff;
+  color: var(--price-color);
 }
 
 .property-address {
   font-size: 0.9rem;
-  color: #555;
+  color: var(--address-color);
 }
 
 .property-description {
   margin-top: 0.5rem;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--desc-color);
   line-height: 1.4;
 
   display: -webkit-box;
@@ -73,46 +100,30 @@
   overflow: hidden;
 }
 
-
-/* 📱 FIXED PHONE VERSION */
+/* MOBILE VERSION */
 @media (max-width: 600px) {
   .properties-container {
     grid-template-columns: 1fr;
     padding: 1rem;
     gap: 1.2rem;
 
-    h1 {
-      font-size: 1.6rem;
-    }
+    h1 { font-size: 1.6rem; }
   }
 
   .property-card {
     padding: 1rem;
     border-radius: 10px;
-    max-height: none;      // allow natural height
+    max-height: none;
   }
 
-  .property-image {
-    height: 190px;
-    border-radius: 10px;
-  }
+  .property-image { height: 190px; border-radius: 10px; }
 
-  /* 🟦 TEXT FIXED FOR PHONE */
   .property-title {
     font-size: 1rem;
-    -webkit-line-clamp: 2;  // allow 2 lines on phone
+    -webkit-line-clamp: 2;
   }
 
-  .property-price {
-    font-size: 0.95rem;
-  }
-
-  .property-address {
-    font-size: 0.85rem;
-  }
-
-  .property-description {
-    font-size: 0.85rem;
-    -webkit-line-clamp: 4;  // more room for text
-  }
+  .property-price { font-size: 0.95rem; }
+  .property-address { font-size: 0.85rem; }
+  .property-description { font-size: 0.85rem; -webkit-line-clamp: 4; }
 }
