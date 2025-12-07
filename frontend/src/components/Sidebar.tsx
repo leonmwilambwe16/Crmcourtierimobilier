@@ -122,7 +122,7 @@ const Sidebar = () => {
                 <li>
                   <Link to="/manager-dashboard">
                     <FiSettings size={20} />
-                    {isOpen && <span className="label">Admin</span>}
+                    {isOpen && <span className="label">Dashboard</span>}
                   </Link>
                 </li>
                 <li>

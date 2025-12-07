@@ -1,0 +1,118 @@
+.clients-page {
+  padding: 25px;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+
+  h1 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .client-table {
+    background: var(--section-bg);
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px var(--shadow);
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border-light);
+        color: var(--text);
+      }
+
+      tr:hover {
+        background: rgba(0, 0, 0, 0.05);
+        transition: 0.2s;
+      }
+
+      td.role.client { color: #007bff; font-weight: 700; }
+      td.role.courtier { color: #ffc107; font-weight: 700; }
+      td.role.admin { color: #dc3545; font-weight: 700; }
+
+      td.actions {
+        display: flex;
+        gap: 10px;
+
+        button {
+          padding: 8px 12px;
+          border-radius: 8px;
+          border: none;
+          color: #fff;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.25s;
+
+          &.edit-btn { background: #007bff; }
+          &.role-btn { background: #28a745; }
+          &.delete-btn { background: #dc3545; }
+
+          &:hover { opacity: 0.85; }
+        }
+      }
+    }
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+
+  .modal {
+    background: var(--section-bg);
+    color: var(--text);
+    padding: 25px;
+    width: 360px;
+    border-radius: 14px;
+    box-shadow: 0 8px 22px var(--shadow);
+
+    h2 { margin-bottom: 15px; }
+    p { margin-bottom: 18px; color: var(--text-secondary); }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      margin-bottom: 14px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .confirm-btn {
+      background: #007bff;
+      width: 100%;
+      padding: 12px;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      &:hover { opacity: 0.9; }
+    }
+
+    .confirm-delete { background: #dc3545 !important; }
+
+    .cancel-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      background: var(--border-light);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      &:hover { opacity: 0.9; }
+    }
+  }
+}
