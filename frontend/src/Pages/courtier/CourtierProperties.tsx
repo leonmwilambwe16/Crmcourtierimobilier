@@ -1,9 +1,11 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/page.styles/CourtierProperties.form.scss";
+import { useAuth } from "../../Context/AuthContext";
 
 interface PropertyForm {
+  _id?: string;
   title: string;
-  price: string;
+  price: number;
   address: string;
   city: string;
   description: string;
@@ -11,20 +13,28 @@ interface PropertyForm {
 }
 
 export default function CourtierProperties() {
+  const { getCourtierProperties, createProperty } = useAuth();
   const [properties, setProperties] = useState<PropertyForm[]>([]);
-  const [success, setSuccess] = useState(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-
   const [form, setForm] = useState<PropertyForm>({
     title: "",
-    price: "",
+    price: 0,
     address: "",
     city: "",
     description: "",
     image: "",
   });
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [success, setSuccess] = useState(false);
 
-  // Handle input change
+  // Fetch properties on mount
+  useEffect(() => {
+    const fetchProperties = async () => {
+      const res = await getCourtierProperties();
+      setProperties(res.properties || []);
+    };
+    fetchProperties();
+  }, []);
+
   const handleChange = (e: any) => {
     const { name, value, files } = e.target;
     if (name === "image" && files && files[0]) {
@@ -35,30 +45,30 @@ export default function CourtierProperties() {
     }
   };
 
-  // Add or Edit property
-  const submit = (e: any) => {
+  const submit = async (e: any) => {
     e.preventDefault();
     if (editingIndex !== null) {
-      // Edit
+      // Edit locally
       const newProps = [...properties];
       newProps[editingIndex] = form;
       setProperties(newProps);
       setEditingIndex(null);
     } else {
-      // Add
-      setProperties([...properties, form]);
+      // Add new property via backend
+      const res = await createProperty(form);
+      if (res.success) {
+        setProperties([...properties, res.property]);
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 1500);
+      }
     }
-    setSuccess(true);
-    setTimeout(() => setSuccess(false), 1500);
-    setForm({ title: "", price: "", address: "", city: "", description: "", image: "" });
+    setForm({ title: "", price: 0, address: "", city: "", description: "", image: "" });
   };
 
-  // Delete property
   const remove = (index: number) => {
     setProperties(properties.filter((_, i) => i !== index));
   };
 
-  // Edit property
   const edit = (index: number) => {
     setForm(properties[index]);
     setEditingIndex(index);
@@ -68,7 +78,7 @@ export default function CourtierProperties() {
     <div className="properties-container">
       {success && <div className="alert-box">{editingIndex !== null ? "Property Edited ✔" : "Property Added ✔"}</div>}
 
-      {/* FORM LEFT */}
+      {/* FORM */}
       <form className="add-form-card" onSubmit={submit}>
         <h2>{editingIndex !== null ? "Edit Property" : "Add Property"}</h2>
         <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
@@ -80,7 +90,7 @@ export default function CourtierProperties() {
         <button className="add-btn" type="submit">{editingIndex !== null ? "Save Changes" : "Add Property"}</button>
       </form>
 
-      {/* PROPERTIES RIGHT */}
+      {/* PROPERTIES LIST */}
       <div className="properties-grid">
         {properties.length === 0 && <p>No properties yet...</p>}
 

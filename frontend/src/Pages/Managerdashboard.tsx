@@ -1,56 +1,60 @@
+
+// AdminDashboard.tsx
+import React, { useEffect, useState } from "react";
 import "../styles/admin.styles/AdminDashboard.scss";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { useAuth } from "../Context/AuthContext";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 const Managerdashboard = () => {
-  const stats = {
-    totalUsers: 120,
-    totalCourtiers: 25,
-    totalClients: 95,
-    monthlyRegistrations: [
-      { month: "Jan", count: 10 },
-      { month: "Feb", count: 15 },
-      { month: "Mar", count: 22 },
-      { month: "Apr", count: 18 },
-      { month: "May", count: 30 },
-      { month: "Jun", count: 25 },
-    ],
-  };
+  const { getMyProperties, getCourtierProperties, getMyDossier } = useAuth();
+  const [properties, setProperties] = useState<any[]>([]);
+  const [dossiers, setDossiers] = useState<any[]>([]);
+  const [monthlyStats, setMonthlyStats] = useState([
+    { month: "Jan", count: 0 },
+    { month: "Feb", count: 0 },
+    { month: "Mar", count: 0 },
+    { month: "Apr", count: 0 },
+    { month: "May", count: 0 },
+    { month: "Jun", count: 0 },
+  ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const propsData = await getCourtierProperties();
+      const dossierData = await getMyDossier();
+      setProperties(propsData.properties || []);
+      setDossiers(dossierData.files || []);
+      // Example: compute monthly stats from dossiers
+      const stats = [...monthlyStats];
+      dossierData.files?.forEach((f: any) => {
+        const month = new Date(f.createdAt).toLocaleString("default", { month: "short" });
+        const index = stats.findIndex(s => s.month === month);
+        if (index >= 0) stats[index].count += 1;
+      });
+      setMonthlyStats(stats);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="manager-dashboard">
-      <h1>Manager Dashboard</h1>
+      <h1>Admin Dashboard</h1>
 
-      {/* CARDS */}
       <div className="manager-cards">
         <div className="manager-card users">
-          <h3>Total Utilisateurs</h3>
-          <p>{stats.totalUsers}</p>
+          <h3>Total Properties</h3>
+          <p>{properties.length}</p>
         </div>
-
-        <div className="manager-card courtiers">
-          <h3>Total Courtiers</h3>
-          <p>{stats.totalCourtiers}</p>
-        </div>
-
         <div className="manager-card clients">
-          <h3>Total Clients</h3>
-          <p>{stats.totalClients}</p>
+          <h3>Total Dossiers</h3>
+          <p>{dossiers.length}</p>
         </div>
       </div>
 
-      {/* CHART */}
       <div className="manager-chart-box">
-        <h2>Inscriptions Mensuelles</h2>
+        <h2>Monthly Dossier Registrations</h2>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={stats.monthlyRegistrations}>
+          <LineChart data={monthlyStats}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
             <YAxis />
@@ -62,5 +66,6 @@ const Managerdashboard = () => {
     </div>
   );
 };
+
 
 export default Managerdashboard;

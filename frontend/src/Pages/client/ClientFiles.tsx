@@ -1,21 +1,27 @@
-import React, { useState } from "react";
-import { FaFileAlt, FaEye, FaDownload, FaTimes } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
 import "../../styles/page.styles/ClientFiles.scss";
+import { useAuth } from "../../Context/AuthContext";
+import { FaFileAlt, FaEye, FaDownload, FaTimes } from "react-icons/fa";
 
 export interface FileItem {
+  _id?: string;
   name: string;
   status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+  fileUrl?: string;
 }
 
 const ClientFiles: React.FC = () => {
+  const { getMyDossier } = useAuth();
+  const [files, setFiles] = useState<FileItem[]>([]);
   const [selected, setSelected] = useState<FileItem | null>(null);
 
-  const files: FileItem[] = [
-    { name: "House_rental_file.pdf", status: "IN_PROGRESS" },
-    { name: "Identity_proof.png", status: "PENDING" },
-    { name: "Contract_file.pdf", status: "COMPLETED" },
-    { name: "Bank_statement.pdf", status: "CANCELLED" },
-  ];
+  useEffect(() => {
+    const fetchFiles = async () => {
+      const res = await getMyDossier();
+      if (res.dossiers) setFiles(res.dossiers);
+    };
+    fetchFiles();
+  }, []);
 
   const steps = ["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELLED"];
 
@@ -35,18 +41,14 @@ const ClientFiles: React.FC = () => {
       <p className="subtitle">Check the status of your files</p>
 
       <div className="files-grid">
-        {files.map((file, i) => (
-          <div key={i} className={`file-card ${file.status.toLowerCase()}`}>
+        {files.map((file) => (
+          <div key={file._id} className={`file-card ${file.status.toLowerCase()}`}>
             <div className="file-info">
-              <div className="file-icon">
-                <FaFileAlt />
-              </div>
+              <div className="file-icon"><FaFileAlt /></div>
               <div className="file-details">
                 <p className="file-name">{file.name}</p>
                 <div className="file-status">
-                  <span style={{ color: getStatusColor(file.status) }}>
-                    {file.status.replace("_", " ")}
-                  </span>
+                  <span style={{ color: getStatusColor(file.status) }}>{file.status.replace("_", " ")}</span>
                 </div>
               </div>
             </div>
@@ -65,9 +67,7 @@ const ClientFiles: React.FC = () => {
                 >
                   <div className="circle"></div>
                   {idx !== steps.length - 1 && <div className="line"></div>}
-                  <span className="step-label">
-                    {step.replace("_", " ")}
-                  </span>
+                  <span className="step-label">{step.replace("_", " ")}</span>
                 </div>
               ))}
             </div>
@@ -83,21 +83,20 @@ const ClientFiles: React.FC = () => {
         <div className="modal-overlay" onClick={() => setSelected(null)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <h3 className="modal-title">{selected.name}</h3>
-            <p className="modal-text">
-              What do you want to do with this file?
-            </p>
+            <p className="modal-text">What do you want to do with this file?</p>
             <div className="modal-actions">
               <button className="btn read-btn">
                 <FaEye className="btn-icon" /> Read File
               </button>
-              <button className="btn download-btn">
-                <FaDownload className="btn-icon" /> Download File
-              </button>
+              {selected.fileUrl && (
+                <a href={selected.fileUrl} target="_blank" rel="noopener noreferrer">
+                  <button className="btn download-btn">
+                    <FaDownload className="btn-icon" /> Download File
+                  </button>
+                </a>
+              )}
             </div>
-            <button
-              className="close-btn"
-              onClick={() => setSelected(null)}
-            >
+            <button className="close-btn" onClick={() => setSelected(null)}>
               <FaTimes className="btn-icon" /> Close
             </button>
           </div>

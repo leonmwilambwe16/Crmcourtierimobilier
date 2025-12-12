@@ -1,4 +1,5 @@
-import { createContext, useContext, ReactNode, useState, useEffect } from "react";
+import { createContext, useContext, type ReactNode, useState, useEffect } from "react";
+
 
 interface User {
   id: string;
@@ -13,6 +14,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
   register: (data: any) => Promise<{ success: boolean; message: string }>;
   logout: () => Promise<void>;
+  updateRole: (userId: string, role: string) => Promise<any>;
 
   // Dossier
   getMyDossier: () => Promise<any>;
@@ -24,7 +26,7 @@ interface AuthContextType {
   createProperty: (data: any) => Promise<any>;
 
   // Messages
-  sendMessage: (receiver: string, content: string) => Promise<any>;
+  sendMessage: (receiverId: string, text: string) => Promise<any>;
   getConversations: (userId: string) => Promise<any>;
 }
 
@@ -33,7 +35,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  // Load user from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("user");
     if (saved) setUser(JSON.parse(saved));
@@ -63,9 +64,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const register = async (formData: any) => {
+  const register = async (formData: any, role: "CLIENT" | "COURTIER" = "CLIENT") => {
     try {
-      const res = await fetch("http://localhost:6080/api/auth/register-client", {
+      const url =
+        role === "CLIENT"
+          ? "http://localhost:6080/api/auth/register-client"
+          : "http://localhost:6080/api/auth/register-courtier";
+
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -89,6 +95,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setUser(null);
       localStorage.removeItem("user");
+    }
+  };
+
+  const updateRole = async (userId: string, role: string) => {
+    try {
+      const res = await fetch("http://localhost:6080/api/auth/update-role", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ userId, role }),
+      });
+      return res.json();
+    } catch (error) {
+      console.error(error);
+      return { success: false };
     }
   };
 
@@ -124,7 +145,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // --- Properties ---
   const getMyProperties = async () => {
     try {
-      const res = await fetch("http://localhost:6080/api/property/my-propertys", {
+      const res = await fetch("http://localhost:6080/api/property/my-properties", {
         method: "GET",
         credentials: "include",
       });
@@ -156,8 +177,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      const response = await res.json();
-      return response; // must include { success: true } from backend
+      return res.json();
     } catch (error) {
       console.error(error);
       return { success: false };
@@ -165,13 +185,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // --- Messages ---
-  const sendMessage = async (receiver: string, content: string) => {
+  const sendMessage = async (receiverId: string, text: string) => {
     try {
       const res = await fetch("http://localhost:6080/api/message/send", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ receiver, content }),
+        body: JSON.stringify({ receiverId, text }),
       });
       return res.json();
     } catch (error) {
@@ -200,6 +220,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         login,
         register,
         logout,
+        updateRole,
         getMyDossier,
         updateDossier,
         getMyProperties,
@@ -214,7 +235,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used inside AuthProvider");

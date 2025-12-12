@@ -1,28 +1,32 @@
 import { Dossier } from "../models/Dossier.js";
+import cloudinary from "../lib/Cloudinary.js";
 
-export const updateDossier = async (req,res)=>{
+export const getMyDossiers = async (req, res) => {
+  const dossiers = await Dossier.find({ clientId: req.user.id });
+  res.json(dossiers);
+};
+
+export const updateDossier = async (req, res) => {
   try {
-    const {clientId} = req.params;
-    const data = req.body;
-    const dossier = await Dossier.findOneAndUpdate({clientId},
-      {
-        ...data,
-        clientId,
-        courtierId: req.user.id
-      },
-      {new:true,upsert:true}
-    );
-    res.status(201).json({message:"Dossier Updated successfully",dossier})
-  } catch (error) {
-    res.status(500).json({messgae:"Error while updating Dossier", error:error.message})
-  }
-}
+    const { clientId } = req.params;
+    const { files } = req.body; // array of base64 or URL
+    const uploadedFiles = [];
 
-export const getMyDossiers = async(req,res)=>{
-try {
-  const dossier = await  Dossier.findOne({clientId:req.user.id});
-  res.status(201).json({message:"Dossier fetched successfully",dossier})
-} catch (error) {
-  res.status(500).json({message:"Error while fetching Dossier",error:error.message})
-}
-}
+    for (let file of files) {
+      const uploaded = await cloudinary.uploader.upload(file, { folder: "dossiers" });
+      uploadedFiles.push(uploaded.secure_url);
+    }
+
+    let dossier = await Dossier.findOne({ clientId });
+    if (!dossier) {
+      dossier = await Dossier.create({ clientId, files: uploadedFiles });
+    } else {
+      dossier.files.push(...uploadedFiles);
+      await dossier.save();
+    }
+
+    res.json({ message: "Dossier updated", dossier });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

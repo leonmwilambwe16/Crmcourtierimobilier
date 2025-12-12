@@ -1,57 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/page.styles/Courtier.dashboard.scss";
 import { useNavigate } from "react-router-dom";
 import { FaFolderOpen, FaEnvelope, FaUserTie, FaFileAlt, FaHome } from "react-icons/fa";
-
-// Dummy data
-const clients = [
-  { id: "1", name: "Alice Smith", picture: "/placeholder.jpg" },
-  { id: "2", name: "Bob Johnson", picture: "/placeholder.jpg" },
-  { id: "3", name: "Charlie Lee", picture: "/placeholder.jpg" },
-];
-
-const files = [
-  { name: "House_rental_file.pdf", status: "IN_PROGRESS" },
-  { name: "Identity_proof.png", status: "PENDING" },
-  { name: "Contract_file.pdf", status: "COMPLETED" },
-];
-
-const properties = [
-  { title: "Luxury House", city: "Toronto" },
-  { title: "Apartment Rental", city: "Vancouver" },
-];
+import { useAuth } from "../Context/AuthContext";
 
 const CourtierDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { getMyClients, getMyFiles, getMyProperties } = useAuth();
+
+  const [clients, setClients] = useState<any[]>([]);
+  const [files, setFiles] = useState<any[]>([]);
+  const [properties, setProperties] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const c = await getMyClients();
+      const f = await getMyFiles();
+      const p = await getMyProperties();
+      setClients(c.clients || []);
+      setFiles(f.files || []);
+      setProperties(p.properties || []);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="courtier-dashboard-content">
-      {/* LEFT SIDE: Overview */}
       <div className="dashboard-left">
         {/* Clients */}
-        <section
-          className="dashboard-section"
-          onClick={() => navigate("/courtier-clients")}
-        >
-          <h3>
-            <FaUserTie /> My Clients
-          </h3>
+        <section className="dashboard-section" onClick={() => navigate("/courtier-clients")}>
+          <h3><FaUserTie /> My Clients</h3>
           <p>Total clients: {clients.length}</p>
           <div className="overview-thumbnails">
             {clients.map((c) => (
-              <img key={c.id} src={c.picture} alt={c.name} title={c.name} />
+              <img key={c._id} src={c.picture || "/placeholder.jpg"} alt={c.name} title={c.name} />
             ))}
           </div>
         </section>
 
         {/* Files */}
-        <section
-          className="dashboard-section"
-          onClick={() => navigate("/courtier-files")}
-        >
-          <h3>
-            <FaFileAlt /> Client Files
-          </h3>
+        <section className="dashboard-section" onClick={() => navigate("/courtier-files")}>
+          <h3><FaFileAlt /> Client Files</h3>
           <p>Total files: {files.length}</p>
           <ul>
             {files.slice(0, 3).map((f, i) => (
@@ -64,13 +53,8 @@ const CourtierDashboard: React.FC = () => {
         </section>
 
         {/* Properties */}
-        <section
-          className="dashboard-section"
-          onClick={() => navigate("/courtier-properties")}
-        >
-          <h3>
-            <FaHome /> My Properties
-          </h3>
+        <section className="dashboard-section" onClick={() => navigate("/courtier-properties")}>
+          <h3><FaHome /> My Properties</h3>
           <p>Total properties: {properties.length}</p>
           <ul>
             {properties.slice(0, 3).map((p, i) => (
@@ -81,13 +65,8 @@ const CourtierDashboard: React.FC = () => {
         </section>
 
         {/* Messages */}
-        <section
-          className="dashboard-section"
-          onClick={() => navigate("/courtier-messages")}
-        >
-          <h3>
-            <FaEnvelope /> Messages
-          </h3>
+        <section className="dashboard-section" onClick={() => navigate("/courtier-messages")}>
+          <h3><FaEnvelope /> Messages</h3>
           <p>You have 5 new messages</p>
           <span className="view-more">Go to Messages →</span>
         </section>

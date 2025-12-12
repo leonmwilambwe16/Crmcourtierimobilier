@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 const MessageSchema = new mongoose.Schema({
-  sender:{type:mongoose.Schema.Types.ObjectId, ref:"User"},
-  receiver:{type:mongoose.Schema.Types.ObjectId, ref:"User"},
-  content:String,
-},{timestamps:true});
+  senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  text: String,
+  attachment: { type: String, default: "" }
+}, { timestamps: true });
 
-export const Message = mongoose.model("Message",MessageSchema);
+export const Message = mongoose.model("Message", MessageSchema);

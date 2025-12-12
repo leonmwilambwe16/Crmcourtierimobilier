@@ -1,30 +1,17 @@
 import { Message } from "../models/Message.js";
 
-export const sendMessage = async (req,res)=>{
+export const sendMessage = async (req, res) => {
   try {
-    const { receiver,content}= req.body;
-    const msg = await Message.create({
-      sender:req.user.id,
-      receiver,
-      content,
-    });
-    res.status(201).json({message:"Message created successfully",msg})
+    const { receiverId, text, attachment } = req.body;
+    const msg = await Message.create({ senderId: req.user.id, receiverId, text, attachment });
+    res.json({ message: "Message sent", msg });
   } catch (error) {
-    res.status(500).json({message:"Error while creating message",message:error.message})
+    res.status(500).json({ error: error.message });
   }
-}
+};
 
-export const getConversations = async(req,res)=>{
-  try {
-    const {userId} = req.params;
-    const messages = await Message.find({
-      $or:[
-        {sender:req.user.id,receiver:userId},
-        {sender:userId,receiver:req.user.id}
-      ],
-    })
-    res.status(201).json({message:"Message fetch sucessfully",messages})
-  } catch (error) {
-    res.status(501).json({message:"Error while fetching message",error:error.message})
-  }
-}
+export const getConversations = async (req, res) => {
+  const userId = req.params.userId;
+  const messages = await Message.find({ $or: [{ senderId: userId }, { receiverId: userId }] });
+  res.json(messages);
+};

@@ -3,80 +3,57 @@ import { useAuth } from "../../Context/AuthContext";
 import { useLocation } from "react-router-dom";
 import "../../styles/page.styles/Message.scss";
 
-interface Message {
-  sender: string;
-  content: string;
-  timestamp?: string;
-}
-
 const ClientMessages: React.FC = () => {
-  const { getConversations, user } = useAuth();
+  const { user, getConversations, sendMessage } = useAuth();
   const location = useLocation();
   const courtier = location.state?.courtier;
 
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !courtier) return;
     getConversations(user.id).then((data) => {
-      if (Array.isArray(data)) setMessages(data);
-      else if (data.messages) setMessages(data.messages);
+      if (data.messages) setMessages(data.messages);
     });
-  }, [user]);
+  }, [user, courtier]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!newMessage.trim()) return;
-    setMessages((prev) => [
-      ...prev,
-      { sender: user?.id || "me", content: newMessage },
-    ]);
-    setNewMessage("");
+    const response = await sendMessage(courtier._id, newMessage);
+    if (response.success) {
+      setMessages((prev) => [...prev, { sender: user.id, content: newMessage }]);
+      setNewMessage("");
+    }
   };
 
   return (
     <div className="message-page">
-
-      {/* Header like dashboard-navbar UI */}
       <div className="message-header">
         {courtier ? (
           <div className="courtier-info">
-            <img src={courtier.picture} alt={courtier.name} />
-            <h3>{courtier.name}</h3>
+            <img src={courtier.picture || "/default.png"} alt={courtier.firstName} />
+            <h3>{courtier.firstName} {courtier.lastName}</h3>
           </div>
-        ) : (
-          <h3>Conversation</h3>
-        )}
+        ) : <h3>Conversation</h3>}
       </div>
 
-      {/* MESSAGES */}
       <div className="message-body">
-        {messages.length === 0 && <p className="no-messages">No messages yet.</p>}
-
         {messages.map((m, i) => (
           <div key={i} className={`bubble ${m.sender === user?.id ? "me" : "courtier"}`}>
             <p>{m.content}</p>
-            {m.timestamp && <span className="timestamp">{m.timestamp}</span>}
           </div>
         ))}
-
         <div ref={messagesEndRef} />
       </div>
 
-      {/* INPUT */}
       <div className="message-input">
-        <input
-          type="text"
-          placeholder="Type a message..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-        />
+        <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSend()} placeholder="Type a message..." />
         <button onClick={handleSend}>Send</button>
       </div>
     </div>
